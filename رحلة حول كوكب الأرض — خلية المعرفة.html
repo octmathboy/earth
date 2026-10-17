@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>رحلة حول كوكب الأرض — خلية المعرفة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;900&family=Reem+Kufi:wght@600;700&display=swap" rel="stylesheet">
+<style>
+:root { color-scheme: dark; --bg:#060d22; --ink:#f0f5ff; --muted:#aebfe3; --gold:#ffcf4a; --line:rgba(170,200,255,.28); --glass:rgba(255,255,255,.08); box-sizing:border-box; }
+* { box-sizing:border-box; }
+html, body { margin:0; min-height:100%; background:var(--bg); color:var(--ink); font-family:"Cairo","Tajawal","Arial",sans-serif; }
+#home { min-height:100svh; display:flex; flex-direction:column; align-items:center; padding:calc(env(safe-area-inset-top,0px) + 14px) 14px calc(env(safe-area-inset-bottom,0px) + 14px); background:radial-gradient(ellipse at 50% 0%,#12306b,var(--bg) 70%); }
+h1 { margin:0; font-family:"Reem Kufi","Cairo",sans-serif; font-size:clamp(26px,7vw,44px); text-align:center; text-shadow:0 2px 18px rgba(90,170,255,.7); }
+.sub { margin:4px 0 8px; color:var(--muted); text-align:center; font-size:clamp(13px,3.6vw,17px); }
+#stars { font-weight:900; color:var(--gold); font-size:18px; margin-bottom:6px; }
+#hive { --W:min(31vw,180px,calc((100svh - 230px)/2.9)); position:relative; width:calc(var(--W)*3); height:calc(var(--W)*2.887); margin:auto 0; }
+.hex { --H:calc(var(--W)*1.1547); position:absolute; width:var(--W); height:var(--H); left:calc(50% - var(--W)/2 + var(--x)*var(--W)); top:calc(50% - var(--H)/2 + var(--y)*var(--H)); border:0; padding:0; font:inherit; color:#fff; cursor:pointer; background:var(--c); clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%); transform:scale(.95); transition:transform .15s, filter .15s; }
+.hex::before { content:""; position:absolute; inset:3px; background:linear-gradient(160deg,color-mix(in srgb,var(--c) 70%,#fff),var(--c) 60%,color-mix(in srgb,var(--c) 70%,#000)); clip-path:inherit; }
+.hex:hover, .hex:active { transform:scale(1); filter:brightness(1.15); }
+.hex:focus-visible { outline:3px solid var(--gold); }
+.hex span { position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; gap:2px; font-weight:900; font-size:clamp(11px,3vw,15px); line-height:1.2; text-shadow:0 1px 4px rgba(0,0,0,.45); }
+.hex b { font-size:calc(var(--W)*.3); line-height:1; }
+.hex.done::after { content:"⭐"; position:absolute; top:10%; left:50%; transform:translateX(-50%); font-size:calc(var(--W)*.16); z-index:2; }
+#hint { color:var(--muted); font-size:14px; text-align:center; margin-top:6px; }
+#cert-btn { display:none; margin-top:8px; }
+.btn { font:inherit; font-weight:700; font-size:15px; padding:10px 16px; border-radius:14px; border:1px solid var(--line); background:transparent; color:var(--ink); cursor:pointer; }
+.btn.main { background:linear-gradient(135deg,#2a7be0,#6a3fb5); border-color:transparent; }
+.btn:focus-visible, input:focus-visible { outline:3px solid var(--gold); outline-offset:2px; }
+
+#sheet { position:fixed; inset:0; z-index:5; overflow-y:auto; background:linear-gradient(180deg,color-mix(in srgb,var(--c) 55%,#000) 0,#0a1226 380px,#060d22); display:none; padding:calc(env(safe-area-inset-top,0px) + 10px) 14px calc(env(safe-area-inset-bottom,0px) + 20px); }
+#sheet.on { display:block; animation:up .28s ease-out; }
+@keyframes up { from { transform:translateY(40px); opacity:0; } }
+.wrap { max-width:640px; margin:0 auto; }
+.top { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.top .btn { padding:8px 14px; }
+.top h2 { margin:0; font-family:"Reem Kufi","Cairo",sans-serif; font-size:clamp(24px,6vw,34px); flex:1; }
+.card { background:var(--glass); border:1px solid var(--line); border-radius:18px; padding:14px; margin-bottom:12px; }
+.intro { font-size:17px; line-height:1.8; margin:0 0 12px; }
+.facts { display:flex; flex-direction:column; gap:8px; }
+.fact { display:flex; gap:10px; align-items:flex-start; font-size:16px; line-height:1.65; }
+.fact i { font-style:normal; font-size:24px; line-height:1.3; }
+.fact b { color:var(--gold); }
+.vtitle { font-family:"Reem Kufi","Cairo",sans-serif; color:var(--gold); font-size:19px; margin:0 0 8px; }
+.big { font-family:"Reem Kufi","Cairo",sans-serif; font-size:30px; color:var(--gold); text-align:center; margin:6px 0; }
+.cap { color:var(--muted); font-size:14px; text-align:center; margin:4px 0 0; line-height:1.6; }
+.seg { display:flex; gap:8px; margin-bottom:8px; }
+.seg .btn { flex:1; padding:9px 4px; font-size:14px; }
+.seg .btn[aria-pressed="true"] { background:var(--c); border-color:transparent; }
+input[type=range] { width:100%; accent-color:var(--gold); height:28px; }
+.track { flex:1; height:10px; border-radius:6px; background:rgba(255,255,255,.14); overflow:hidden; }
+.track i { display:block; height:100%; width:0; background:linear-gradient(90deg,#ffd24a,#fff7b0); }
+.sunrow { display:flex; align-items:center; gap:10px; font-size:30px; }
+.grid100 { display:grid; grid-template-columns:repeat(10,1fr); gap:3px; max-width:300px; margin:8px auto; }
+.grid100 i { aspect-ratio:1; border-radius:4px; background:#2a7a4a; transition:background .3s; }
+.bars { display:flex; flex-direction:column; gap:6px; }
+.bar { display:grid; grid-template-columns:96px 1fr 44px; align-items:center; gap:8px; font:inherit; color:var(--ink); background:transparent; border:0; padding:3px 0; cursor:pointer; text-align:right; font-size:14px; font-weight:700; }
+.bar .tr { height:16px; background:rgba(255,255,255,.1); border-radius:8px; overflow:hidden; }
+.bar .tr i { display:block; height:100%; border-radius:8px; background:var(--c); }
+.bar[aria-pressed="true"] .tr i { background:var(--gold); }
+.bar small { color:var(--muted); font-size:12px; }
+#dive { height:130px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:56px; margin-bottom:8px; transition:background .2s; }
+.q h3 { margin:0 0 8px; font-size:18px; }
+.opts { display:flex; flex-direction:column; gap:8px; }
+.opt.ok { background:#1f9d55; border-color:transparent; }
+.opt.no { background:#c0392b; border-color:transparent; }
+.nav { display:flex; gap:8px; justify-content:space-between; }
+#cert { position:fixed; inset:0; z-index:9; display:none; place-items:center; background:rgba(2,6,16,.85); padding:16px; }
+#cert.on { display:grid; }
+.cc { max-width:420px; width:100%; text-align:center; padding:26px 18px; border-radius:22px; background:linear-gradient(160deg,#fff4cc,#ffe08a); color:#3a2a00; border:6px double #c48a00; }
+.cc h2 { margin:0; font-family:"Reem Kufi","Cairo",sans-serif; font-size:30px; }
+.cc input { font:inherit; text-align:center; width:80%; font-size:20px; font-weight:700; border:0; border-bottom:2px solid #c48a00; background:transparent; color:#3a2a00; margin:10px 0; }
+.conf { position:fixed; font-size:26px; pointer-events:none; animation:fly 1.1s ease-out forwards; z-index:20; }
+@keyframes fly { to { transform:translate(var(--dx),var(--dy)) rotate(260deg); opacity:0; } }
+@media (prefers-reduced-motion: reduce) { .conf, #sheet.on { animation:none; } }
+</style>
+</head>
+<body>
+<div id="home">
+<h1>رحلة حول كوكب الأرض 🌍</h1>
+<p class="sub">المس أي خلية من خلية النحل لتتعرّف على موضوعها</p>
+<div id="stars"></div>
+<div id="hive"></div>
+<div id="hint">أجب عن سؤال كل خلية لتجمع النجوم السبع!</div>
+<button class="btn main" id="cert-btn">🏅 اعرض شهادتي</button>
+</div>
+<div id="sheet"><div class="wrap" id="sc"></div></div>
+<div id="cert"><div class="cc"><h2>🏅 شهادة تقدير</h2><p>تُمنح إلى المستكشف الصغير</p><input id="cn" placeholder="اكتب اسمك" maxlength="24"><p>لإتمامه رحلة استكشاف <b>كوكب الأرض</b> وجمع النجوم السبع بنجاح 🌟</p><p style="font-size:14px">خذ لقطة شاشة لتحتفظ بها</p><button class="btn main" id="cc-x">إغلاق</button></div></div>
+
+<script>
+const STUDENT = ""; // اكتب اسمك هنا بين علامتي التنصيص، مثال: "سارة"
+const $ = id => document.getElementById(id);
+const T = [
+ { ico:'🌍', t:'كوكب الأرض', c:'#c98f00', pos:[0,0], vis:'sun',
+   intro:'الأرض هي البيت الكبير الذي نعيش فيه نحن والنباتات والحيوانات، وهي الكوكب الوحيد المعروف الذي توجد عليه حياة.',
+   facts:[['🪐','هي <b>ثالث</b> كواكب المجموعة الشمسية بعد عطارد والزهرة.'],['⏳','عمرها نحو <b>4.5 مليار سنة</b>.'],['🌙','لها قمر طبيعي <b>واحد</b> هو القمر.'],['☀️','تبعد عن الشمس نحو <b>150 مليون كلم</b>، وتصلنا أشعتها بعد نحو 8 دقائق.']],
+   q:['كم قمراً طبيعياً للأرض؟',['قمر واحد','قمران','ثلاثة أقمار'],0] },
+ { ico:'📏', t:'شكل الأرض وغلافها', c:'#0f8fb8', pos:[-.5,-.75], vis:'walk',
+   intro:'شكل الأرض يشبه الكرة، لكنها مفلطحة قليلاً عند القطبين، ويحيط بها غلاف من الهواء يحمي الحياة.',
+   facts:[['📏','قطرها نحو <b>12 700 كلم</b>، ومحيطها نحو <b>40 000 كلم</b>.'],['🌬️','الهواء نحو <b>78% نيتروجين</b> و<b>21% أكسجين</b>، وهو الذي نتنفسه.'],['🛡️','يمتد الغلاف الجوي نحو 100 كلم، وفيه طبقة <b>الأوزون</b> التي تحمينا من الأشعة الضارة.'],['🌧️','بدون الغلاف الجوي لا مطر ولا رياح ولا حياة.']],
+   q:['ما الغاز الذي نحتاجه في التنفس؟',['الأكسجين','الهيليوم','الهيدروجين'],0] },
+ { ico:'💧', t:'الماء واليابسة', c:'#1f6fd1', pos:[.5,-.75], vis:'water',
+   intro:'الأرض تُسمّى «الكوكب الأزرق» لأن الماء يغطي معظم سطحها.',
+   facts:[['🔵','الماء <b>71%</b> من سطح الأرض، واليابسة <b>29%</b> فقط.'],['🧂','نحو <b>97%</b> من ماء الأرض <b>مالح</b>، والعذب نحو 3% فقط.'],['🧊','أكثر من <b>ثلثي</b> الماء العذب مجمّد في الجليد والأنهار الجليدية.'],['🚰','لذلك علينا أن نحافظ على الماء ولا نُسرف فيه.']],
+   q:['كم تبلغ نسبة الماء على سطح الأرض تقريباً؟',['29%','71%','50%'],1] },
+ { ico:'🗺️', t:'القارات الكبرى', c:'#2e9e4f', pos:[1,0], vis:'cont',
+   intro:'القارة مساحة واسعة من اليابسة. قارات العالم سبع، والمس أي قارة في الرسم لتعرف سرّها.',
+   facts:[['🌏','أكبر القارات <b>آسيا</b> وأصغرها <b>أستراليا (أوقيانوسيا)</b>.'],['❄️','<b>أنتاركتيكا</b> قارة بلا دول، ويغطيها الجليد.'],['🧭','قارتان تسميان «الأمريكتين»: الشمالية والجنوبية.']],
+   q:['ما أكبر قارات العالم مساحة؟',['أوروبا','آسيا','أفريقيا'],1] },
+ { ico:'🐋', t:'المحيطات الكبرى', c:'#0b4aa8', pos:[.5,.75], vis:'dive',
+   intro:'المحيط مسطح مائي ضخم ومالح، وعددها خمسة. اسحب الشريط لتغوص في أعماقها!',
+   facts:[['🌊','<b>الهادئ</b>: الأكبر والأعمق، ويغطي نحو ثلث سطح الأرض.'],['🚢','<b>الأطلسي</b>: الثاني في الحجم، وهو أكثر المحيطات ملوحة.'],['🌴','<b>الهندي</b>: الأدفأ، ويقع بين أفريقيا وآسيا وأستراليا.'],['🐧','<b>المتجمد الجنوبي</b>: يحيط بأنتاركتيكا.'],['🐻‍❄️','<b>المتجمد الشمالي</b>: الأصغر والأبرد، ويغطي معظمه الجليد.']],
+   q:['ما المحيط الأكبر والأعمق؟',['الهندي','الأطلسي','الهادئ'],2] },
+ { ico:'🌙', t:'الليل والنهار', c:'#6a3fb5', pos:[-.5,.75], vis:'spin',
+   intro:'تدور الأرض حول نفسها كالخذروف، فتواجه الشمس جهة وتبتعد عنها جهة أخرى.',
+   facts:[['🔄','دورة كاملة كل <b>24 ساعة</b>، وهي اليوم.'],['🏎️','سرعتها عند خط الاستواء نحو <b>1670 كلم/س</b>، ولا نشعر بها!'],['🌅','تشرق الشمس من <b>الشرق</b> لأن الأرض تدور نحو الشرق.'],['🕰️','حين يكون عندنا نهار يكون ليلاً في الجهة المقابلة، ولهذا تختلف التوقيتات بين الدول.']],
+   q:['من أي جهة تشرق الشمس؟',['الغرب','الشمال','الشرق'],2] },
+ { ico:'🍂', t:'الفصول الأربعة', c:'#d9731a', pos:[-1,0], vis:'orbit',
+   intro:'تدور الأرض حول الشمس دورة كاملة في سنة، وتدور وهي مائلة، فتنشأ الفصول.',
+   facts:[['📅','السنة <b>365 يوماً وربع</b>، ولهذا نضيف يوماً كل 4 سنوات فتصبح السنة الكبيسة 366 يوماً.'],['📐','سبب الفصول هو <b>ميل محور الأرض 23.4°</b> وليس قربها أو بعدها عن الشمس.'],['🚀','تسير الأرض في مدارها بسرعة نحو <b>30 كلم في الثانية</b>.'],['🔁','حين يكون صيف في نصف الكرة الشمالي يكون <b>شتاء</b> في الجنوبي.']],
+   q:['ما سبب الفصول الأربعة؟',['ميل محور الأرض','حجم القمر','دوران الأرض حول نفسها'],0] }
+];
+let earned = new Set();
+try { earned = new Set(JSON.parse(localStorage.getItem('earthStars') || '[]')); } catch (e) {}
+const save = () => { try { localStorage.setItem('earthStars', JSON.stringify([...earned])); } catch (e) {} };
+function say(t) { if (!('speechSynthesis' in window)) return; speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'ar-SA'; u.rate = .85; speechSynthesis.speak(u); }
+function confetti() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  for (let i = 0; i < 16; i++) { const s = document.createElement('span'); s.className = 'conf'; s.textContent = ['⭐','🎉','✨','🌟'][i % 4]; s.style.left = (innerWidth / 2) + 'px'; s.style.top = (innerHeight * .6) + 'px'; s.style.setProperty('--dx', (Math.random() * 300 - 150) + 'px'); s.style.setProperty('--dy', (Math.random() * -300 - 40) + 'px'); document.body.appendChild(s); setTimeout(() => s.remove(), 1200); }
+}
+
+/* ---------- الصفحة الرئيسية ---------- */
+function home() {
+  $('hive').innerHTML = T.map((d, i) => `<button class="hex ${earned.has(i) ? 'done' : ''}" style="--c:${d.c};--x:${d.pos[0]};--y:${d.pos[1]}" data-i="${i}" aria-label="${d.t}"><span><b>${d.ico}</b>${d.t}</span></button>`).join('');
+  $('stars').textContent = '⭐'.repeat(earned.size) + '☆'.repeat(7 - earned.size) + '  ' + earned.size + ' / 7';
+  $('cert-btn').style.display = earned.size === 7 ? 'inline-block' : 'none';
+}
+$('hive').addEventListener('click', e => { const b = e.target.closest('.hex'); if (b) open(+b.dataset.i); });
+
+/* ---------- الخلايا الداخلية ---------- */
+const V = {
+ sun: () => ({ h: `<h3 class="vtitle">☀️ رحلة ضوء الشمس إلى الأرض</h3><div class="sunrow"><span>☀️</span><div class="track"><i id="ray"></i></div><span>🌍</span></div><div class="big" id="clk">0:00</div><p class="cap">المسافة 150 مليون كلم، والضوء أسرع شيء في الكون!</p><div style="text-align:center;margin-top:8px"><button class="btn main" id="go">✨ أرسل شعاع ضوء</button></div>`,
+   i: r => { let busy = 0; r.querySelector('#go').onclick = () => { if (busy) return; busy = 1; const t0 = performance.now(); (function s(n) { const p = Math.min(1, (n - t0) / 5000), sec = Math.round(p * 500); r.querySelector('#ray').style.width = p * 100 + '%'; r.querySelector('#clk').textContent = Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0') + ' دقيقة'; if (p < 1) requestAnimationFrame(s); else { busy = 0; r.querySelector('#clk').textContent = '8:20 — وصل الضوء! ☀️'; } })(t0); }; } }),
+ walk: () => ({ h: `<h3 class="vtitle">⏱️ كم تحتاج لتدور حول الأرض؟</h3><div class="seg" id="sg"><button class="btn" data-k="0" aria-pressed="true">🚶 ماشياً</button><button class="btn" data-k="1" aria-pressed="false">🚗 سيارة</button><button class="btn" data-k="2" aria-pressed="false">✈️ طائرة</button></div><div class="big" id="wr"></div><p class="cap" id="wc"></p>`,
+   i: r => { const D = [['نحو 333 يوماً','بسرعة 5 كلم/س دون توقف: 40 000 ÷ 5 = 8000 ساعة'],['نحو 17 يوماً','بسرعة 100 كلم/س: 400 ساعة'],['نحو يومين','بسرعة 900 كلم/س: نحو 44 ساعة']]; const set = k => { r.querySelectorAll('#sg .btn').forEach(b => b.setAttribute('aria-pressed', b.dataset.k == k)); r.querySelector('#wr').textContent = D[k][0]; r.querySelector('#wc').textContent = D[k][1]; }; r.querySelector('#sg').onclick = e => { const b = e.target.closest('.btn'); if (b) set(b.dataset.k); }; set(0); } }),
+ water: () => ({ h: `<h3 class="vtitle">🔵 تخيّل الأرض مئة قطرة</h3><div class="seg" id="sg"><button class="btn" data-k="0" aria-pressed="true">سطح الأرض</button><button class="btn" data-k="1" aria-pressed="false">ماء الأرض</button></div><div class="grid100" id="gd">${'<i></i>'.repeat(100)}</div><p class="cap" id="wc"></p>`,
+   i: r => { const cs = r.querySelectorAll('#gd i'); const M = [[71, '#1f7bd8', '#3fae5f', '🔵 ماء 71 &nbsp; 🟢 يابسة 29'], [97, '#0b3d91', '#7fe3ff', '🔵 ماء مالح 97 &nbsp; 🩵 ماء عذب 3']]; const set = k => { r.querySelectorAll('#sg .btn').forEach(b => b.setAttribute('aria-pressed', b.dataset.k == k)); cs.forEach((c, i) => { c.style.transitionDelay = i * 8 + 'ms'; c.style.background = i < M[k][0] ? M[k][1] : M[k][2]; }); r.querySelector('#wc').innerHTML = M[k][3]; }; r.querySelector('#sg').onclick = e => { const b = e.target.closest('.btn'); if (b) set(b.dataset.k); }; setTimeout(() => set(0), 60); } }),
+ cont: () => ({ h: `<h3 class="vtitle">📊 مساحات القارات (مليون كلم²)</h3><div class="bars" id="bs"></div><p class="cap" id="cf" style="min-height:3.2em;margin-top:8px;color:var(--ink);font-size:15px">المس قارة لتعرف سرّها.</p>`,
+   i: r => { const C = [['آسيا',44.6,'فيها أعلى جبل في العالم: إفرست (8849 م).'],['أفريقيا',30.4,'فيها نهر النيل وهو من أطول أنهار العالم، والصحراء الكبرى أكبر صحراء حارة.'],['أمريكا الشمالية',24.7,'فيها كندا والولايات المتحدة والمكسيك وجزيرة غرينلاند.'],['أمريكا الجنوبية',17.8,'فيها غابات الأمازون وجبال الأنديز.'],['أنتاركتيكا',14.2,'أبرد قارة: بلا دول، ويغطيها الجليد، وفيها نحو 70% من الماء العذب.'],['أوروبا',10.2,'قارة فيها أكثر من 40 دولة وجبال الألب.'],['أستراليا',8.5,'أصغر القارات، يعيش فيها الكنغر وفيها الحاجز المرجاني العظيم.']]; const bs = r.querySelector('#bs'); bs.innerHTML = C.map((c, i) => `<button class="bar" aria-pressed="false" data-i="${i}"><span>${c[0]}</span><div class="tr"><i style="width:${c[1] / 44.6 * 100}%"></i></div><small>${c[1]}</small></button>`).join(''); bs.onclick = e => { const b = e.target.closest('.bar'); if (!b) return; bs.querySelectorAll('.bar').forEach(x => x.setAttribute('aria-pressed', x === b)); r.querySelector('#cf').textContent = C[b.dataset.i][0] + ': ' + C[b.dataset.i][2]; }; } }),
+ dive: () => ({ h: `<h3 class="vtitle">🤿 اغطس في المحيط</h3><div id="dive">🐬</div><input type="range" id="dr" min="0" max="11000" step="50" value="0" aria-label="العمق"><div class="big" id="dd">0 متر</div><p class="cap" id="dz" style="color:var(--ink);font-size:15px"></p>`,
+   i: r => { const Z = [[200,'🐬','المنطقة المضيئة: يصل إليها الضوء، وتعيش فيها الأسماك والدلافين والسلاحف.'],[1000,'🦑','منطقة الشفق: ضوء خافت جداً وحيوانات غريبة.'],[4000,'🐙','منطقة الظلام: لا ضوء إطلاقاً، وبعض الأسماك تضيء بنفسها!'],[11001,'🦠','الأعماق السحيقة: برد وضغط هائل، وفيها خندق ماريانا (نحو 11 كلم).']]; const lerp = (a, b, t) => Math.round(a + (b - a) * t); const up = () => { const d = +r.querySelector('#dr').value, t = Math.min(1, d / 4000); r.querySelector('#dive').style.background = `rgb(${lerp(62,2,t)},${lerp(199,6,t)},${lerp(240,24,t)})`; const z = Z.find(z => d < z[0]); r.querySelector('#dive').textContent = z[1]; r.querySelector('#dd').textContent = d.toLocaleString('ar-EG') + ' متر'; r.querySelector('#dz').textContent = z[2] + (d >= 8849 ? ' ⛰️ أنت الآن أعمق من ارتفاع جبل إفرست!' : ''); }; r.querySelector('#dr').oninput = up; up(); } }),
+ spin: () => ({ h: `<h3 class="vtitle">🧑‍🚀 أين أنت من الشمس؟ (منظر من القطب الشمالي)</h3><svg viewBox="0 0 240 200" style="width:100%;max-width:340px;display:block;margin:0 auto"><circle cx="24" cy="100" r="16" fill="#ffc83d"/><g stroke="#ffc83d" stroke-width="3" stroke-linecap="round"><path d="M24 74v-8M24 134v-8M-2 100h-8M50 100h-4M6 82l-5-5M42 118l5 5M6 118l-5 5M42 82l5-5"/></g><circle cx="135" cy="100" r="62" fill="#3b8fe0"/><circle cx="135" cy="100" r="62" fill="none" stroke="#9fd6ff" stroke-width="3" opacity=".6"/><path d="M135 38A62 62 0 0 1 135 162Z" fill="#050a1e" opacity=".6"/><circle id="me" r="9" fill="#ffcf4a" stroke="#fff" stroke-width="2"/><text x="135" y="104" text-anchor="middle" font-size="12" fill="#fff" font-family="Cairo,Arial" font-weight="700">الأرض</text></svg><div class="big" id="tm"></div><input type="range" id="hr" min="0" max="24" step="0.5" value="12" aria-label="الساعة"><p class="cap">اسحب الشريط لتدور الأرض. تدور نحو الشرق، عكس عقارب الساعة عند النظر إليها من القطب الشمالي.</p>`,
+   i: r => { const up = () => { const h = +r.querySelector('#hr').value, a = (h - 12) / 24 * 6.2832; r.querySelector('#me').setAttribute('cx', 135 - 62 * Math.cos(a)); r.querySelector('#me').setAttribute('cy', 100 + 62 * Math.sin(a)); const hh = Math.floor(h) % 24, mm = h % 1 ? '30' : '00', h12 = hh % 12 || 12, ph = (hh < 5.5 || hh >= 19) ? '🌙 ليل' : (h >= 5.5 && h < 6.5) ? '🌅 شروق' : (h >= 17.5 && h < 18.5) ? '🌇 غروب' : (h > 6.5 && h < 17.5) ? '☀️ نهار' : '🌙 ليل'; r.querySelector('#tm').textContent = h12 + ':' + mm + (hh < 12 ? ' ص' : ' م') + ' — ' + ph; }; r.querySelector('#hr').oninput = up; up(); } }),
+ orbit: () => ({ h: `<h3 class="vtitle">🛰️ الأرض في مدارها حول الشمس</h3><svg viewBox="0 0 280 190" style="width:100%;max-width:380px;display:block;margin:0 auto"><ellipse cx="140" cy="95" rx="108" ry="62" fill="none" stroke="#7aa2e0" stroke-width="1.5" stroke-dasharray="5 4"/><circle cx="140" cy="95" r="15" fill="#ffc83d"/><g font-size="11" font-weight="700" font-family="Cairo,Arial" fill="#cfe0ff" text-anchor="middle"><text x="256" y="76">❄️ شتاء</text><text x="140" y="22">🌸 ربيع</text><text x="26" y="76">☀️ صيف</text><text x="140" y="182">🍂 خريف</text></g><g id="eg"><circle r="12" fill="#3b8fe0" stroke="#bfe6ff" stroke-width="1.5"/><path d="M-6.5 -15L6.5 15" stroke="#fff" stroke-width="2"/><circle cx="-6.5" cy="-15" r="2.2" fill="#ffc83d"/></g></svg><input type="range" id="mo" min="0" max="11" step="1" value="5" aria-label="الشهر"><div class="big" id="mn"></div><p class="cap" id="ms" style="color:var(--ink);font-size:15px"></p>`,
+   i: r => { const M = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'], S = ['❄️ شتاء','❄️ شتاء','🌸 ربيع','🌸 ربيع','🌸 ربيع','☀️ صيف','☀️ صيف','☀️ صيف','🍂 خريف','🍂 خريف','🍂 خريف','❄️ شتاء'], O = {'❄️ شتاء':'☀️ صيف','☀️ صيف':'❄️ شتاء','🌸 ربيع':'🍂 خريف','🍂 خريف':'🌸 ربيع'}; const up = () => { const m = +r.querySelector('#mo').value, a = (m - 11) / 12 * 6.2832; r.querySelector('#eg').setAttribute('transform', `translate(${140 + 108 * Math.cos(a)} ${95 - 62 * Math.sin(a)})`); r.querySelector('#mn').textContent = M[m]; r.querySelector('#ms').innerHTML = `نصف الكرة الشمالي: <b>${S[m]}</b><br>نصف الكرة الجنوبي: <b>${O[S[m]]}</b>`; }; r.querySelector('#mo').oninput = up; up(); } })
+};
+const keys = ['sun','walk','water','cont','dive','spin','orbit'];
+function open(i) {
+  const d = T[i], v = V[keys[i]](), order = [0,1,2,3,4,5,6];
+  const opts = d.q[1].map((o, k) => [o, k]).sort(() => Math.random() - .5);
+  $('sheet').style.setProperty('--c', d.c);
+  $('sc').innerHTML = `<div class="top"><button class="btn" id="bk">→ رجوع</button><h2>${d.ico} ${d.t}</h2></div>
+   <div class="card"><p class="intro">${d.intro}</p><button class="btn" id="rd">🔊 اسمع</button></div>
+   <div class="card" style="--c:${d.c}">${v.h}</div>
+   <div class="card"><h3 class="vtitle">📚 معلومات مهمة</h3><div class="facts">${d.facts.map(f => `<div class="fact"><i>${f[0]}</i><span>${f[1]}</span></div>`).join('')}</div></div>
+   <div class="card q"><h3 class="vtitle">⭐ سؤال النجمة</h3><h3>${d.q[0]}</h3><div class="opts">${opts.map(o => `<button class="btn opt" data-k="${o[1]}">${o[0]}</button>`).join('')}</div><p class="cap" id="qm"></p></div>
+   <div class="nav"><button class="btn" id="pv">← السابقة</button><button class="btn main" id="nx">التالية →</button></div>`;
+  $('sheet').classList.add('on'); $('sheet').scrollTop = 0; document.body.style.overflow = 'hidden'; v.i($('sc'));
+  $('bk').onclick = close; $('rd').onclick = () => say(d.t + '. ' + d.intro + ' ' + d.facts.map(f => f[1].replace(/<[^>]+>/g, '')).join(' '));
+  $('pv').onclick = () => open((i + 6) % 7); $('nx').onclick = () => open((i + 1) % 7);
+  $('sc').querySelector('.opts').onclick = e => {
+    const b = e.target.closest('.opt'); if (!b) return;
+    if (+b.dataset.k === d.q[2]) { b.classList.add('ok'); const nw = !earned.has(i); earned.add(i); save(); $('qm').textContent = nw ? '🎉 أحسنت! ربحت نجمة ⭐' : '🎉 أحسنت!'; if (nw) { confetti(); say('أحسنت'); } if (earned.size === 7 && nw) setTimeout(showCert, 1400); }
+    else { b.classList.add('no'); $('qm').textContent = 'حاول مرة أخرى 🙂'; setTimeout(() => b.classList.remove('no'), 600); }
+  };
+}
+function close() { if (window.speechSynthesis) speechSynthesis.cancel(); $('sheet').classList.remove('on'); document.body.style.overflow = ''; home(); }
+function showCert() { $('cn').value = STUDENT || $('cn').value; $('cert').classList.add('on'); }
+$('cert-btn').onclick = showCert; $('cc-x').onclick = () => $('cert').classList.remove('on');
+home();
+</script>
+</body>
+</html>
